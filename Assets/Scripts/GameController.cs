@@ -6,12 +6,8 @@ using DG.Tweening;
 public class GameController : MonoBehaviour
 {
     public static GameController ins;
-    public List<GameObject> numberBoxSingle;
-    public List<GameObject> numberBox;
-    public List<GameObject> boxPlay;
-    public List<GameObject> objectParent;
-
-    public List<Transform> popup;
+    public GameObject numberPrefab;
+    public Transform tileContainer;
 
     private void Awake()
     {
@@ -28,27 +24,43 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        SpawnNumber(1, 1);
-        boxPlay[0].transform.SetParent(objectParent[2].transform);
-        MoveBox();
+        SpawnNumber();
+        SpawnNumber();
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            MoveBox(Vector2.left);
+            SpawnNumber();
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            MoveBox(Vector2.right);
+            SpawnNumber();
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            MoveBox(Vector2.up);
+            SpawnNumber();
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            MoveBox(Vector2.down);
+            SpawnNumber();
+        }
     }
 
-    public void MoveBox()
+    public void MoveBox(Vector2 direction)
     {
-        boxPlay[0].transform.DOMove(new Vector3(0, -6, 0), 2);
     }
 
-    private void OnMouseEnter()
-    {
-        
-    }
 
-    public void SpawnNumber(int x, int y)
+
+    public void SpawnNumber()
     {
-        int number = Random.Range(1, 6);
-        GameObject number1 = Instantiate(numberBoxSingle[number - 1]);
-        Vector2 pos = new Vector2(0, 5.45f);
-        number1.transform.position = pos;
-        boxPlay.Add(number1);
+        GameObject newTile = Instantiate(numberPrefab, tileContainer);
+        int newValue = Random.Range(1, 3) * 2;
+        newTile.GetComponent<Box>().Initialize(newValue);
     }
 }
