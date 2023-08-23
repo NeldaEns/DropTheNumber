@@ -2,40 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 using UnityEngine.UI;
 
 public class Box : MonoBehaviour
 {
     public int value;
     public Text valueText;
+    public Color tileColor;
 
-    public void Initialize(int newValue)
+    private bool isMoving = false;
+    private Vector3 targetPosition;
+    private float moveSpeed = 5f;
+
+    public void InitializeTile(int newValue, Color newColor)
     {
         value = newValue;
-        UpdateAppearance();
-    }
+        tileColor = newColor;
 
-    void UpdateAppearance()
-    {
+        GetComponent<SpriteRenderer>().color = tileColor;
+
         valueText.text = value.ToString();
     }
-}
 
-public enum Number
-{
-    None = 0,
-    Two,
-    Four,
-    Eight,
-    One6,
-    Three2,
-    Six4,
-    One28,
-    Two56,
-    Five12,
-    One024,
-    Two048,
-    Four096,
-    Eight192,
-    One6384
+    public void MoveToPosition(Vector3 newPosition)
+    {
+        if (!isMoving)
+        {
+            targetPosition = newPosition;
+            StartCoroutine(MoveCoroutine());
+        }
+    }
+
+    private IEnumerator MoveCoroutine()
+    {
+        isMoving = true;
+        while (transform.position != targetPosition)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            yield return new WaitForSeconds(0.01f);
+        }
+        isMoving = false;
+    }
+
 }

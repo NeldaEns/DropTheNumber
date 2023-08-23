@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class ObjectParent : MonoBehaviour
 {
-    public Collider2D coll;
-    void Start()
-    {
-        
-    }
-
     private void OnMouseDown()
     {
-
+        GameController.ins.HandleColumnClick(transform);
     }
 }
