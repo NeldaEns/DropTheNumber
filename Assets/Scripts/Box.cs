@@ -11,7 +11,6 @@ public class Box : MonoBehaviour
     public Text valueText;
     public Color tileColor;
 
-    private bool isMoving = false;
     private Vector3 targetPosition;
     private float moveSpeed = 5f;
 
@@ -27,7 +26,7 @@ public class Box : MonoBehaviour
 
     public void MoveToPosition(Vector3 newPosition)
     {
-        if (!isMoving)
+        if (!GameController.ins.isMoving)
         {
             targetPosition = newPosition;
             StartCoroutine(MoveCoroutine());
@@ -36,13 +35,13 @@ public class Box : MonoBehaviour
 
     private IEnumerator MoveCoroutine()
     {
-        isMoving = true;
+        GameController.ins.isMoving = true;
         while (transform.position != targetPosition)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.1f);
         }
-        isMoving = false;
+        GameController.ins.isMoving = false;
     }
 
 }

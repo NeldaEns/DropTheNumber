@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     public Transform targetColumn;
     private Box movingTile;
     public float moveSpeed = 2.0f;
+    public bool isMoving = false;
     private int[] possibleValues = { 2, 4, 8, 16, 32 };
 
     private void Awake()
@@ -42,7 +43,7 @@ public class GameController : MonoBehaviour
 
         GameObject newNumberTile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity);
         Box numberTileComponent = newNumberTile.GetComponent<Box>();
-
+        numberTileComponent.transform.SetParent(spawnColumn.transform);
         if (numberTileComponent != null)
         {
             numberTileComponent.InitializeTile(randomValue, randomColor);
@@ -57,9 +58,8 @@ public class GameController : MonoBehaviour
 
     private IEnumerator MoveTileDown(Box tile, Transform spawnColumn)
     {
-        float endY = GetEmptyRowForColumn(spawnColumn) - 0.5f; 
+        float endY = GetEmptyRowForColumn(spawnColumn) - 5.5f; 
         Vector3 targetPosition = new Vector3(tile.transform.position.x, endY, tile.transform.position.z);
-
         float startY = tile.transform.position.y;
         float t = 0;
 
@@ -68,7 +68,7 @@ public class GameController : MonoBehaviour
             t += Time.deltaTime * moveSpeed;
             float newY = Mathf.Lerp(startY, targetPosition.y, t);
             tile.transform.position = new Vector3(tile.transform.position.x, newY, tile.transform.position.z);
-            yield return null;
+            yield return new WaitForSeconds(0.1f);
         }
 
         tile.transform.position = targetPosition;
