@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9204823916521344981}
   - component: {fileID: 4135961471011236653}
   - component: {fileID: 7185069347588062660}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NumberTile
   m_TagString: NumberTile
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 6615587963939917781}
   - component: {fileID: 2007655259895449056}
   - component: {fileID: 4952839951828728148}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (Legacy)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3018868, g: 0.27169812, b: 0.27169812, a: 1}
+  m_Color: {r: 0.26415092, g: 0.24770379, b: 0.24770379, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

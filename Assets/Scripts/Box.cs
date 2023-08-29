@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using TMPro;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class Box : MonoBehaviour
 {
@@ -11,37 +11,17 @@ public class Box : MonoBehaviour
     public Text valueText;
     public Color tileColor;
 
-    private Vector3 targetPosition;
-    private float moveSpeed = 5f;
-
-    public void InitializeTile(int newValue, Color newColor)
+    public void InitializeTile(int newValue)
     {
         value = newValue;
-        tileColor = newColor;
+
+        valueText.text = value.ToString();
 
         GetComponent<SpriteRenderer>().color = tileColor;
 
-        valueText.text = value.ToString();
     }
-
-    public void MoveToPosition(Vector3 newPosition)
+    public void MoveToPosition(Vector3 targetPosition, float speed)
     {
-        if (!GameController.ins.isMoving)
-        {
-            targetPosition = newPosition;
-            StartCoroutine(MoveCoroutine());
-        }
+        transform.DOMove(targetPosition, speed);
     }
-
-    private IEnumerator MoveCoroutine()
-    {
-        GameController.ins.isMoving = true;
-        while (transform.position != targetPosition)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-            yield return new WaitForSeconds(0.1f);
-        }
-        GameController.ins.isMoving = false;
-    }
-
 }
