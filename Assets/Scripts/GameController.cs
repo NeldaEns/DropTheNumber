@@ -9,14 +9,14 @@ public class GameController : MonoBehaviour
     public GameObject tilePrefab;
     public List<Transform> columns;
     public Transform targetColumn;
-    private Box movingTile;
+    public Box movingTile;
     public float moveSpeed = 1.0f;
-    private int[] possibleValues = { 2, 4, 8, 16, 32 };
+    public int[] possibleValues = { 2, 4, 8, 16, 32 };
 
 
     public LayerMask tileLayerMask;
 
-    private void Awake()
+    public void Awake()
     {
         if (ins != null)
         {
@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void Start()
     {
         SpawnNewTile();
     }
@@ -39,44 +39,43 @@ public class GameController : MonoBehaviour
         int randomIndex = Random.Range(0, possibleValues.Length);
         int randomValue = possibleValues[randomIndex];
 
-        Transform spawnColumn = columns[Random.Range(0, columns.Count)];
+        targetColumn = columns[Random.Range(0, columns.Count)];
 
-        Vector3 spawnPosition = new Vector3(spawnColumn.position.x, 6 , spawnColumn.position.z);
+        Vector3 spawnPosition = new Vector3(targetColumn.position.x, 5.7f , targetColumn.position.z);
 
         GameObject newNumberTile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity);
-        Box numberTileComponent = newNumberTile.GetComponent<Box>();
-        numberTileComponent.transform.SetParent(spawnColumn.transform);
-        if (numberTileComponent != null)
+        movingTile = newNumberTile.GetComponent<Box>();
+        movingTile.transform.SetParent(targetColumn);
+        if (movingTile != null)
         {
             switch (randomValue)
             {
                 case 2:
-                    numberTileComponent.tileColor = Color.red;
+                    movingTile.tileColor = Color.red;
                     break;
 
                 case 4:
-                    numberTileComponent.tileColor = Color.yellow;
+                    movingTile.tileColor = Color.yellow;
                     break;
 
                 case 8:
-                    numberTileComponent.tileColor = Color.blue;
+                    movingTile.tileColor = Color.blue;
                     break;
 
                 case 16:
-                    numberTileComponent.tileColor = Color.green;
+                    movingTile.tileColor = Color.green;
                     break;
 
                 case 32:
-                    numberTileComponent.tileColor = Color.cyan;
+                    movingTile.tileColor = Color.cyan;
                     break;
             }
-            if(numberTileComponent.value > 32)
+            if(movingTile.value > 32)
             {
-                numberTileComponent.tileColor = Color.gray;
+                movingTile.tileColor = Color.gray;
             }
-            numberTileComponent.InitializeTile(randomValue);
-
-            StartCoroutine(MoveTileDown(numberTileComponent, spawnColumn));
+            movingTile.InitializeTile(randomValue);
+            StartCoroutine(MoveTileDown(movingTile, targetColumn));
         }
         else
         {
@@ -85,9 +84,9 @@ public class GameController : MonoBehaviour
     }
 
 
-    private IEnumerator MoveTileDown(Box tile, Transform spawnColumn)
+    public IEnumerator MoveTileDown(Box tile, Transform spawnColumn)
     {
-        float endY = GetEmptyRowForColumn(spawnColumn) - 5.5f;
+        float endY = GetEmptyRowForColumn(spawnColumn) - 5.7f;
         Vector3 targetPosition = new Vector3(tile.transform.position.x, endY, tile.transform.position.z);
         float startY = tile.transform.position.y;
         float t = 0;
@@ -97,14 +96,14 @@ public class GameController : MonoBehaviour
             t += Time.deltaTime * moveSpeed;
             float newY = Mathf.Lerp(startY, targetPosition.y, t);
             tile.transform.position = new Vector3(tile.transform.position.x, newY, tile.transform.position.z);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
 
         tile.transform.position = targetPosition;
     }
 
 
-    private int GetEmptyRowForColumn(Transform column)
+    public int GetEmptyRowForColumn(Transform column)
     {
         int emptyRow = 0;
 
@@ -129,12 +128,12 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void MoveTileToColumn()
+    public void MoveTileToColumn()
     {
         Vector3 targetPosition = new Vector3(targetColumn.position.x, movingTile.transform.position.y, targetColumn.position.z);
         movingTile.MoveToPosition(targetPosition, moveSpeed);
+        moveSpeed = 5.0f;
+        movingTile.transform.SetParent(targetColumn);
         movingTile = null;
-        targetColumn = null;
     }
-
 }
